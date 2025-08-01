@@ -1,0 +1,19 @@
+    1. What is an Exception
+
+    => An exception is an event that disrupts the normal flow of a program during execution.
+    Java provides a robust mechanism to handle exceptions through the try-catch-finally
+    blocks and the exception class hierarchy.
+
+    java.lang.Object
+      ↳ java.lang.Throwable
+           ↳ java.lang.Error          (unchecked, fatal errors)
+           ↳ java.lang.Exception      (checked and unchecked)
+                ↳ java.lang.RuntimeException (unchecked)
+
+
+    - Throwable is the superclass of all errors and exceptions.
+    - Error: Serious problems that should not be caught (e.g., OutOfMemoryError, StackOverflowError).
+    - Exception: Problems that can be caught and handled.
+    - Checked Exceptions (e.g., IOException, SQLException): Must be declared or handled.
+    - Unchecked Exceptions (e.g., NullPointerException, IllegalArgumentException): Occur at
+    runtime and are usually programming bugs.

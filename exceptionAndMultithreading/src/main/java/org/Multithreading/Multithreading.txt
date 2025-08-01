@@ -1,0 +1,219 @@
+
+    AtomicInteger  -> Integer
+    AtomicLong     -> Long
+    AtomicBoolean  -> Boolean
+    AtomicReference -> Object
+
+    get/set
+    get -> retrieves a value from the memory
+    set -> retrieves a value to the memory
+
+    compareAndSet
+
+    boolean compareAndSet(expectedValue, newValue)  ->
+    It atomically sets the value to newValue only if the current value equals expectedValue.
+    Returns true if successful, false otherwise.
+
+    what is concurrency in java?
+    => it means a program can execute multiple task concurrently.
+        - Concurrency and multithreading are closely related concepts
+        - Multithreading is just one way to achieve concurrency in java
+        - The concurrency utilities are present in java.util.concurrent package
+            - Synchronizer
+            - Executor
+            - Concurrent collections
+            - The Fork/Join Framework
+
+
+    Executor Framework in java-
+
+    The Executor Framework was introduced in java 5 as part of the java.util.concurrect
+    package to simplify the developer of concurrent application by abstracting away many of the
+    complexity involved in creating and managing threads
+
+    - manual thread management
+    - Resource Management
+    - Scalability
+    - Thread Reuse
+    - Error Handling
+
+    Executor Framework has three interface
+    - Executor
+    - ExecutorService
+    - ScheduledExecutorService
+
+=============================================================================================
+
+Multithreading in Java is a programming feature that allows the concurrent execution of
+multiple parts of a program, known as threads, within a single process. This enables a
+program to perform multiple tasks simultaneously, leading to improved CPU utilization and
+application responsiveness.
+
+Key Concepts of Multithreading in Java:
+Threads:
+Threads are lightweight sub-processes within a larger process. They are the smallest unit of processing that can be scheduled by the operating system. Each thread has its own execution path but shares the same memory space and resources with other threads within the same process.
+Concurrency:
+Multithreading achieves concurrency by allowing multiple threads to execute seemingly simultaneously. On a single-core CPU, this is achieved through time-slicing, where the CPU rapidly switches between threads, giving the illusion of parallel execution. On multi-core CPUs, threads can truly run in parallel on different cores.
+Creating Threads:
+In Java, threads can be created in two primary ways:
+Extending the Thread class: A class can extend the Thread class and override its run() method, which contains the code to be executed by the thread.
+Implementing the Runnable interface: A class can implement the Runnable interface and define the run() method. An instance of this class is then passed to a Thread object.
+Benefits:
+Improved responsiveness: Applications can remain responsive to user input while performing long-running tasks in the background.
+Better resource utilization: Multiple tasks can share resources efficiently, such as CPU time and memory.
+Enhanced performance: Computationally intensive tasks can be divided among multiple threads to speed up execution.
+Challenges:
+Race conditions: When multiple threads access and modify shared data concurrently, leading to unpredictable results.
+Deadlocks: When two or more threads are blocked indefinitely, waiting for each other to release resources.
+Synchronization: Techniques like synchronized blocks/methods, wait(), notify(), and notifyAll() are used to manage access to shared resources and prevent data inconsistencies.
+Thread Lifecycle:
+A Java thread progresses through several states:
+New: The thread object is created but not yet started.
+Runnable: The start() method is called, making the thread ready to run.
+Running: The thread is actively executing its run() method.
+Blocked/Waiting: The thread is temporarily paused, waiting for a resource or an action from another thread.
+Timed Waiting: Similar to waiting, but with a specified time limit.
+Terminated/Dead: The thread has completed its execution or encountered an unhandled exception.
+Inter-thread Communication in Java
+Inter-thread communication in Java is a mechanism in which a thread is paused from running in its critical section, and another thread is allowed to enter (or lock) the same critical section to be executed.
+Note: Inter-thread communication is also known as Cooperation in Java.
+
+
+Synchronization in Java multithreading
+Synchronization in Java multithreading is a mechanism to control access to shared resources when multiple threads are executing concurrently. This is vital for preventing data inconsistencies and issues like race conditions that can arise when multiple threads try to access and modify the same data simultaneously.
+Why is synchronization needed
+Imagine a scenario where multiple threads try to update a shared counter simultaneously. Without synchronization, the final value of the counter might be less than expected due to thread interference and inconsistent updates.
+For example, if two threads are incrementing a shared counter and both read the current value, increment it, and then write it back, one of the increments might be lost if their actions interleave incorrectly. This is because the increment operation (like count++) is not atomic (meaning it's not a single, indivisible operation).
+How is synchronization achieved in Java
+1. synchronized keyword
+The synchronized keyword can be applied to methods or blocks of code. Synchronized methods ensure only one thread can execute that method on a specific object at a time, acquiring a lock on the object. Synchronized blocks offer finer-grained control by locking on a specified object for a particular section of code. Static synchronization locks the class itself.
+2. Locks (using ReentrantLock)
+The ReentrantLock class provides more flexible explicit locking mechanisms, allowing for manual lock acquisition and release. This approach often uses a finally block to ensure the lock is released even if exceptions occur.
+3. wait(), notify(), and notifyAll() methods
+These methods are used for inter-thread communication or coordination. They allow threads to pause execution (wait()) and release a lock until signaled by another thread (notify() or notifyAll()).
+Other thread safety techniques
+volatile keyword: Guarantees visibility of variable changes across threads but not atomicity.
+Atomic classes: Offer thread-safe operations on single variables without using locks, improving performance in some cases.
+Executor services: Simplify thread and task management.
+Important considerations
+Deadlocks: Improper synchronization can lead to deadlocks where threads are stuck waiting for each other.
+Performance: Synchronization can introduce overhead due to lock management.
+Thread safety: Designing code to function correctly with multiple threads is crucial and involves various techniques.
+
+
+
+
+
+
+What is a deadlock situation
+
+In a deadlock situation, multiple threads may wait on each other to release shared resources in order to run. This can happen when, for example, a single thread has exclusive priority but needs resources from a waiting thread. Deadlocks represent a serious challenge in concurrency programming that can completely halt application progress.
+
+What is a livelock
+
+A livelock is like a deadlock situation where the state of the threads changes without making progress. This can happen when all the threads are in infinite loops. While the Thread class instances remain active, they cannot complete their tasks, creating another form of concurrency failure.
+
+Explain how threads communicate with each other
+
+There should be effective communication between threads when they use shared resources. Threads use the methods like notify(), wait() and notifyAll() in the object class to communicate the status of resources. These methods are fundamental to concurrency control and facilitate coordination between Thread class instances
+
+================================================================
+
+1. Why are the methods notify(), wait(), and notifyAll() in the Object class
+The methods notify(), wait(), and notifyAll() are part of the Object class in Java because they are fundamental to the concept of inter-thread communication. These methods allow threads to communicate about the state of an object, enabling synchronization between threads that share resources.
+wait(): When a thread calls this method on an object, it releases the object's monitor and enters a waiting state until another thread invokes notify() or notifyAll() on the same object. This is useful for implementing a producer-consumer scenario where a thread may need to wait for a condition to be met.
+notify(): This method wakes up a single thread that is waiting on the object's monitor. If multiple threads are waiting, one of them is chosen at the discretion of the thread scheduler.
+notifyAll(): This method wakes up all the threads that are waiting on the object's monitor. This is useful when multiple threads need to be informed about a change in state.
+2. How are the methods wait() and sleep() different
+wait():
+Belongs to the Object class.
+Causes the current thread to release the monitor (lock) of the object and enter a waiting state until another thread invokes notify() or notifyAll() on the same object.
+Must be called from a synchronized context (inside a synchronized block or method).
+It is used for inter-thread communication.
+sleep():
+Belongs to the Thread class.
+Causes the current thread to pause execution for a specified period (in milliseconds or nanoseconds).
+Does not release any locks held by the thread.
+It is used for delaying execution, not for inter-thread communication.
+3. What is a daemon thread
+A daemon thread in Java is a thread that runs in the background and is typically used for tasks that do not prevent the JVM from exiting when the program finishes. Daemon threads are low-priority threads that provide services to user threads. For example, the garbage collector is a daemon thread.
+4. How do you create a daemon thread in Java
+To create a daemon thread in Java, you can follow these steps:
+Create a thread by extending the Thread class or implementing the Runnable interface.
+Call the setDaemon(true) method on the thread instance before starting the thread.
+5. Why is it important to override the run() method in a Thread class
+Overriding the run() method is crucial because it defines the code that will be executed when the thread is started. The run() method contains the logic that the thread will execute concurrently with other threads. If you do not override this method, the thread will not perform any action when started.
+When you create a thread by extending the Thread class, you must provide an implementation of the run() method to specify what the thread should do.
+6. How can you achieve thread safety in concurrency programming?
+Thread safety can be achieved in several ways:
+Synchronization: Use synchronized blocks or methods to control access to shared resources. This ensures that only one thread can access the resource at a time.
+Locks: Use explicit locks (e.g., ReentrantLock) to provide more flexible thread synchronization compared to synchronized blocks.
+Atomic Variables: Use classes from the java.util.concurrent.atomic package (e.g., AtomicInteger, AtomicBoolean) for operations that need to be atomic.
+Thread-safe Collections: Use collections from the java.util.concurrent package (e.g., ConcurrentHashMap, CopyOnWriteArrayList) that are designed to be thread-safe.
+Immutability: Design your classes to be immutable, which means their state cannot change after they are created. This eliminates the need for synchronization.
+7. In Java, what does the keyword volatile mean?
+The volatile keyword in Java is used to indicate that a variable's value will be modified by different threads. When a variable is declared as volatile, it ensures that:
+The most recent write to the variable is always visible to all threads.
+The reads and writes to the variable are not cached, and every access to the variable goes directly to the main memory.
+This helps prevent issues related to caching and ensures visibility of changes made by one thread to other threads. However, volatile does not guarantee atomicity, so it should not be used as a substitute for synchronization when multiple operations need to be performed atomically.
+
+What is CompletableFuture in Java?
+CompletableFuture is part of the java.util.concurrent package (Java 8+), designed for asynchronous and non-blocking programming. It allows you to run tasks in the background, chain multiple operations, combine multiple futures, and handle results or exceptions once the task is complete.
+Why Use CompletableFuture?
+Non-blocking & efficient for async programming.
+Better readability than manual thread handling.
+Supports chaining with callbacks (thenApply, thenAccept, thenRun, etc.).
+Exception handling (exceptionally, handle).
+Combining multiple tasks (thenCombine, allOf, anyOf).
+CompletableFuture in Java is a powerful tool for writing asynchronous, non-blocking code, introduced in Java 8. It allows you to handle complex asynchronous programming scenarios, such as combining multiple asynchronous tasks, handling exceptions, and executing tasks in parallel.
+
+Use cases include:
+Chaining multiple asynchronous tasks.
+Handling results of asynchronous computations.
+Combining results from multiple futures.
+Key method names include:
+supplyAsync()
+thenApply()
+thenAccept()
+thenCombine()
+exceptionally()
+join()
+complete()
+allOf()
+anyOf()
+CompletableFuture is a class in the java.util.concurrent package that represents a future result of an asynchronous computation. It allows you to write non-blocking code and provides a rich API for composing asynchronous tasks.
+Key Features
+Asynchronous Execution: You can run tasks asynchronously without blocking the main thread.
+Chaining: You can chain multiple tasks together, allowing for complex workflows.
+Exception Handling: It provides methods to handle exceptions that may occur during asynchronous execution.
+Combining Results: You can combine results from multiple CompletableFutures.
+Use Cases
+Chaining Asynchronous Tasks: You can create a sequence of tasks where the output of one task is the input to the next.
+Combining Multiple Futures: You can wait for multiple asynchronous tasks to complete and combine their results.
+Handling Errors Gracefully: You can specify fallback actions in case of exceptions during task execution.
+================================================================
+
+In multithreading, both volatile and classes from the java.util.concurrent.atomic package
+(like AtomicInteger) are used to deal with thread visibility and synchronization issues,
+but they solve different problems and are used in different scenarios.
+
+When to Use volatile:
+
+    Use volatile when multiple threads only read/write a single variable
+    (no compound operations like x++)
+
+    - Guarantees visibility of changes to variables across threads
+    - Only visibility, not atomicity
+    - When you just want to read/write the variable and ensure all threads see the latest value
+
+When to Use Atomic Classes:
+
+    Use Atomic when you need atomic read-modify-write operations across threads like
+    increment, decrement, etc
+
+    - Ensures atomic (thread-safe) read-modify-write operations
+    - Provides both visibility and atomicity
+    - When you want to perform atomic operations like increment, update, compare-and-set
+
+
+
